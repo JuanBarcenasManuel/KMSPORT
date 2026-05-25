@@ -59,7 +59,7 @@ with st.sidebar:
 # --- 5. SECCIÓN: INICIO ---
 if menu == "Inicio":
     st.title("KMSPORT")
-    st.markdown("#### Ropa y accesorios deportivos en Caracas")
+    st.markdown("#### Ropa y accesorios deportivos")
     
     st.image("https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=1200", use_container_width=True)
     
@@ -67,7 +67,7 @@ if menu == "Inicio":
     st.write(
         "Somos un emprendimiento dedicado a seleccionar las mejores tendencias en indumentaria "
         "y artículos deportivos. Nos enfocamos en ofrecer prendas modernas, cómodas y de alta calidad "
-        "con atención personalizada para toda el área de Caracas."
+
     )
 
 # --- 6. SECCIÓN: CATÁLOGO ---
@@ -133,6 +133,7 @@ elif menu == "Información de Compra":
         st.markdown("### Métodos de Pago")
         st.write("* Efectivo ($)")
         st.write("* Pago Móvil")
+        st.write("* USDT")
         st.write("* Zelle (Consultar condiciones)")
         
     st.markdown("---")
