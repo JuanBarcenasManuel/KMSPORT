@@ -127,8 +127,7 @@ elif menu == "Información de Compra":
         st.markdown("### Entregas y Envíos")
         st.write("* **Pick Up:** Entregas personales en Caracas previo acuerdo.")
         st.write("* **Delivery:** Despachos express a domicilio en zonas urbanas (costo adicional).")
-        st.write("* **Envíos al Interior:** Envíos cobro en destino a nivel nacional a través de Zoom o MRW.")
-    
+        
     with c2:
         st.markdown("### Métodos de Pago")
         st.write("* Efectivo ($)")
