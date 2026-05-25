@@ -4,15 +4,14 @@ import os
 
 # --- 1. CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
-    page_title="KMSPORT | Catálogo Oficial",
-    page_icon="💪",
+    page_title="KMSPORT | Catálogo Showroom",
+    page_icon="👟",
     layout="wide"
 )
 
 # --- 2. CARGA DE DATOS REALES (EXTRAÍDOS DE TU ARCHIVO EXCEL/CSV) ---
 @st.cache_data
 def cargar_catalogo_kmsport():
-    # Cargamos la data exacta de tu archivo con sus precios base
     productos = [
         {"Producto": "Conjunto deportivo de sujetador halter plisado y mallas unicolor", "Categoría": "Mujer", "Precio": 24.0, "Imagen": "conjunto_plisado.png"},
         {"Producto": "Conjunto deportivo de top halter sin espalda y leggings unicolor", "Categoría": "Mujer", "Precio": 24.0, "Imagen": "conjunto_halter.png"},
@@ -39,123 +38,114 @@ def cargar_catalogo_kmsport():
 
 df_km = cargar_catalogo_kmsport()
 
-# --- RUTA DE IMÁGENES (Para tu repositorio local o servidor) ---
-# Si tus imágenes están en una carpeta llamada 'images' dentro de tu repositorio, déjalo así:
+# Carpeta local para fotos de productos (si las tienes ahí)
 IMG_DIR = "images" 
+
+# --- 🚀 URL DE TU LOGO EN GITHUB ---
+# REMANZAR AQUÍ: Ve a tu GitHub, haz clic en tu logo, presiona el botón "Raw" y copia ese enlace exacto aquí:
+URL_LOGO_GITHUB = "https://raw.githubusercontent.com/TU_USUARIO/TU_REPOSITORIO/main/logo.png"
 
 # --- 3. BARRA LATERAL (NAVEGACIÓN) ---
 with st.sidebar:
-    # Intenta cargar tu logo real desde tu carpeta de imágenes
-    logo_path = os.path.join(IMG_DIR, "logo.png") # Cambia "logo.png" por el nombre exacto de tu archivo
-    if os.path.exists(logo_path):
-        st.image(logo_path, use_container_width=True)
-    else:
-        st.markdown("# 👟 **KMSPORT**")
+    # Mostramos el logo directamente usando la URL de GitHub
+    st.image(URL_LOGO_GITHUB, caption="KMSPORT", use_container_width=True)
         
     st.markdown("---")
-    menu = st.radio("Secciones del Sitio:", ["🏠 Inicio", "🛍️ Catálogo por Secciones", "📩 Contacto"])
+    menu = st.radio("Secciones:", ["🏠 Inicio", "🛍️ Ver Catálogo", "📩 ¿Cómo comprar?"])
     st.markdown("---")
-    st.success("🚚 Envíos a toda Venezuela")
-    st.info("💡 Descuentos especiales por volumen de compra")
+    st.warning("📍 Entregas en Caracas")
+    st.info("🛵 Delivery disponible / Pick up")
 
-# --- 4. SECCIÓN: INICIO (PÁGINA PRINCIPAL) ---
+# --- 4. SECCIÓN: INICIO ---
 if menu == "🏠 Inicio":
-    st.title("Bienvenidos a KMSPORT")
-    st.subheader("Tu aliado estratégico en ropa y accesorios deportivos masivos.")
+    st.title("KMSPORT")
+    st.subheader("¡Tu nueva marca favorita de ropa y accesorios deportivos!")
     
-    # Imagen de portada de tienda deportiva
-    st.image("https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200", use_container_width=True)
+    # Imagen estética de fondo
+    st.image("https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=1200", use_container_width=True)
     
-    col_nos, col_val = st.columns(2)
-    with col_nos:
-        st.markdown("### 🏆 Sobre Nosotros")
-        st.write(
-            "En KMSPORT nos dedicamos a la distribución de indumentaria y accesorios "
-            "deportivos de alta calidad. Nos enfocamos en ofrecer las últimas tendencias "
-            "del mercado retail fitness, garantizando precios altamente competitivos para revendedores "
-            "y tiendas a nivel nacional."
-        )
-        
-    with col_val:
-        st.markdown("### ✨ ¿Por qué elegirnos?")
-        st.write("* **Variedad en Tendencias:** Catálogo actualizado para Damas, Caballeros y Accesorios.")
-        st.write("* **Logística Eficiente:** Despachos rápidos y coordinados a todo el territorio nacional.")
-        st.write("* **Relación Calidad-Precio:** Productos seleccionados con excelentes márgenes de ganancia.")
+    st.markdown("### 👋 ¡Hola! Bienvenido a nuestro emprendimiento")
+    st.write(
+        "Somos un equipo apasionado por el fitness que está empezando a traer "
+        "las mejores tendencias en conjuntos, monos y accesorios deportivos a Caracas. "
+        "Buscamos ofrecerte prendas cómodas, modernas y de excelente calidad para que "
+        "lo des todo en tus entrenamientos sin gastar una fortuna."
+    )
 
-# --- 5. SECCIÓN: CATÁLOGO DIVIDIDO EN SECCIONES ---
-elif menu == "🛍️ Catálogo por Secciones":
-    st.title("🔎 Explorar Catálogo")
-    st.write("Usa los filtros o navega por las pestañas dedicadas por sección:")
+# --- 5. SECCIÓN: CATÁLOGO ---
+elif menu == "🛍️ Ver Catálogo":
+    st.title("🛍️ Nuestro Catálogo")
+    st.write("Explora lo que tenemos disponible. Si te gusta algo, dale clic al botón para escribirnos directamente al WhatsApp.")
     
-    # Buscador global rápido
-    query = st.text_input("¿Buscas algo en específico?", placeholder="Ej: Mono, Guantes, Dewbera, Camiseta...")
+    query = st.text_input("Buscar producto:", placeholder="Ej: Mono, Guantes...")
     
-    # Filtrar data global por la búsqueda antes de armar las pestañas
     df_filtrado = df_km.copy()
     if query:
         df_filtrado = df_filtrado[df_filtrado["Producto"].str.contains(query, case=False)]
 
-    # --- CREACIÓN DE PESTAÑAS (HOMBRE / MUJER / ACCESORIOS) ---
-    tab_mujer, tab_hombre, tab_acc = st.tabs(["💃 Línea Mujer", "🏃‍♂️ Línea Hombre", "🎒 Accesorios y Equipamiento"])
+    tab_mujer, tab_hombre, tab_acc = st.tabs(["💃 Damas", "🏃‍♂️ Caballeros", "🎒 Accesorios"])
     
-    # Función interna para mostrar los productos en una cuadrícula bonita de tarjetas
     def mostrar_cuadricula(categoria_nombre, df_data):
         df_cat = df_data[df_data["Categoría"] == categoria_nombre]
         
         if df_cat.empty:
-            st.warning("No se encontraron productos en esta sección para tu búsqueda.")
+            st.warning("No tenemos productos que coincidan con tu búsqueda en esta sección.")
             return
 
-        # Crear filas con 3 columnas cada una
         cols = st.columns(3)
         for idx, row in enumerate(df_cat.itertuples()):
             col_actual = cols[idx % 3]
             with col_actual:
                 with st.container(border=True):
-                    # Manejo de la imagen del producto
+                    # Carga de la foto del artículo
                     img_item_path = os.path.join(IMG_DIR, row.Imagen)
                     if os.path.exists(img_item_path):
                         st.image(img_item_path, use_container_width=True)
                     else:
-                        # Imagen provisional si no encuentra tu archivo local aún
-                        st.image("https://via.placeholder.com/300x300.png?text=KM+SPORT", use_container_width=True)
+                        st.image("https://via.placeholder.com/300x300.png?text=KMSPORT", use_container_width=True)
                     
-                    st.markdown(f"#### **{row.Producto}**")
+                    st.markdown(f"##### **{row.Producto}**")
                     st.markdown(f"### **${row.Precio:.2f}**")
                     
-                    # Enlace de WhatsApp personalizado para CADA producto
-                    texto_wa = f"Hola KMSPORT! Me interesa el producto: {row.Producto} (Precio: ${row.Precio:.2f})"
+                    # Mensaje personalizado de WhatsApp
+                    texto_wa = f"¡Hola! Me interesó este producto de tu catálogo: {row.Producto} (${row.Precio:.2f}). ¿Tienen disponibilidad?"
                     link_pedido = f"https://wa.me/584120195510?text={texto_wa.replace(' ', '%20')}"
                     
-                    st.link_button("📥 Ordenar / Consultar", link_pedido, use_container_width=True)
+                    st.link_button("📲 Consultar Disponibilidad", link_pedido, use_container_width=True)
 
     with tab_mujer:
         mostrar_cuadricula("Mujer", df_filtrado)
-        
     with tab_hombre:
         mostrar_cuadricula("Hombre", df_filtrado)
-        
     with tab_acc:
         mostrar_cuadricula("Accesorios", df_filtrado)
 
-# --- 6. SECCIÓN: CONTACTO ---
-elif menu == "📩 Contacto":
-    st.title("📩 Canales de Atención Oficiales")
-    st.write("Ponte en contacto directo con nuestro equipo de ventas para cotizaciones de volumen.")
+# --- 6. SECCIÓN: CÓMO COMPRAR ---
+elif menu == "📩 ¿Cómo comprar?":
+    st.title("📩 Métodos de Entrega y Pago")
+    st.write("Al ser un emprendimiento en crecimiento, coordinamos las ventas de forma personalizada:")
     
-    c_info, c_qr = st.columns(2)
-    with c_info:
-        st.markdown("### 📍 Información de la Empresa")
-        st.markdown("**📍 Ubicación:** Caracas, Venezuela (Despachos y envíos nacionales)")
-        st.markdown("**📞 Teléfonos Principales:** 0412-0195510 / 0412-8020434")
-        st.markdown("**✉️ Correo Electrónico:** Juanbarcenass18@gmail.com")
-        st.markdown("**🕒 Horario de atención:** Lunes a Sábado - 8:00 AM a 6:00 PM")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("### 🛵 Métodos de Entrega (Caracas)")
+        st.write("* **Pick Up:** Entregas personales previo acuerdo (puedes coordinar el punto de encuentro por WhatsApp).")
+        st.write("* **Delivery:** Contamos con servicio de delivery express en zonas de Caracas con un costo adicional.")
+        st.write("* **Envíos Nacionales:** Si estás fuera de Caracas, podemos enviártelo cobro en destino por Zoom o MRW.")
     
-    with c_qr:
-        st.markdown("### 📲 ¡Escríbenos Directo!")
-        wa_general = "https://wa.me/584120195510?text=Hola%20KMSPORT,%20solicito%20información%20general."
-        st.link_button("💬 Chat General de WhatsApp", wa_general, type="primary", use_container_width=True)
+    with c2:
+        st.markdown("### 💳 Métodos de Pago")
+        st.write("* Efectivo ($)")
+        st.write("* Pago Móvil")
+        st.write("* Zelle (Consultar previamente)")
+        
+    st.markdown("---")
+    st.markdown("### 📲 ¿Quieres hablar con nosotros?")
+    st.write("Escríbenos para cualquier duda, consulta de tallas o coordinar una entrega:")
+    st.write("📞 **Teléfonos:** 0412-0195510 / 0412-8020434")
+    
+    wa_general = "https://wa.me/584120195510?text=Hola%20KMSPORT,%20quiero%20hacerles%20una%20consulta."
+    st.link_button("💬 Chatear por WhatsApp", wa_general, type="primary")
 
 # --- PIE DE PÁGINA ---
 st.markdown("---")
-st.caption(f"© {pd.Timestamp.now().year} KMSPORT | Creado para potenciar tu rendimiento comercial.")
+st.caption(f"© {pd.Timestamp.now().year} KMSPORT | Impulsando tu estilo deportivo.")
