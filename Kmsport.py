@@ -40,7 +40,7 @@ df_km = cargar_catalogo_kmsport()
 
 # --- 3. CONFIGURACIÓN DEL LOGO LOCAL ---
 # Buscamos el nombre exacto del archivo que tienes en tu repositorio
-NOMBRE_LOGO = "logo-kmsport.png" 
+NOMBRE_LOGO = "LogoKmsport.png" 
 
 # --- 4. BARRA LATERAL (NAVEGACIÓN) ---
 with st.sidebar:
